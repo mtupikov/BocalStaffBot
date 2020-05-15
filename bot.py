@@ -5,7 +5,7 @@ from discord.ext import commands
 from tig.tig_impl import *
 
 token = os.getenv('DISCORD_TOKEN')
-guild = 'UNIT Factory Community'
+guild = os.getenv('DISCORD_GUILD_TOKEN')
 bot = commands.Bot(command_prefix='!', case_insensitive=True)
 
 
