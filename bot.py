@@ -1,38 +1,51 @@
 import os
 
 import discord
-import asyncio
 from discord.ext import commands
-
-from tig import *
+from tig.tig_impl import *
 
 token = os.getenv('DISCORD_TOKEN')
-guild = 'UNIT 42'
-
+guild = 'UNIT Factory Community'
 bot = commands.Bot(command_prefix='!', case_insensitive=True)
+
 
 @bot.command(name='give_tig')
 @commands.has_role("admin")
 async def give_tig(ctx):
 	asyncio.create_task(manage_tig(ctx, True))
 
+
 @bot.command(name='remove_tig')
 @commands.has_role("admin")
 async def remove_tig(ctx):
 	asyncio.create_task(manage_tig(ctx, False))
 
+
+@bot.event
 async def on_message(message):
 	if message.author == bot.user:
 		return
 
-	if 'pidor' in message.content or 'пидор' in message.content:
+	tig_condition = 'pidor' in message.content or 'пидор' in message.content
+	cheat_condition = \
+		'-42' in message.content or \
+		'cheat' in message.content or \
+		'чит' in message.content
+	to_bot_condition = f'<@!{bot.user.id}>' in message.content
+
+	if tig_condition:
 		await message.channel.send(f'{message.author.name}, wanna TIG?')
-	elif '-42' in message.content:
+	elif cheat_condition:
 		await message.channel.send('CHEATING IS SLAVERY!')
-	elif f'<@!{bot.user.id}>' in message.content:
+	elif to_bot_condition:
 		await message.channel.send(
 			f'{message.author.name}, ask peer on left, and then on right.'
 		)
 
-bot.add_listener(on_message, 'on_message')
-bot.run(token)
+loop = asyncio.get_event_loop()
+try:
+	loop.run_until_complete(bot.start(token))
+except KeyboardInterrupt:
+	loop.run_until_complete(bot.logout())
+finally:
+	loop.close()
