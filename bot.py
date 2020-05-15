@@ -31,7 +31,7 @@ async def on_message(message):
 		await message.channel.send('CHEATING IS SLAVERY!')
 	elif f'<@!{bot.user.id}>' in message.content:
 		await message.channel.send(
-			f'{message.author.name}, ask peer on left, and then ot right.'
+			f'{message.author.name}, ask peer on left, and then on right.'
 		)
 
 bot.add_listener(on_message, 'on_message')
