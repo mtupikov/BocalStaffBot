@@ -1,11 +1,9 @@
 import os
 
-import discord
 from discord.ext import commands
 from tig.tig_impl import *
+from message_helpers.helper import *
 
-token = os.getenv('DISCORD_TOKEN')
-guild = os.getenv('DISCORD_GUILD_TOKEN')
 bot = commands.Bot(command_prefix='!', case_insensitive=True)
 
 
@@ -26,26 +24,26 @@ async def on_message(message):
 	if message.author == bot.user:
 		return
 
-	tig_condition = 'pidor' in message.content or 'пидор' in message.content
-	cheat_condition = \
-		'-42' in message.content or \
-		'cheat' in message.content or \
-		'чит' in message.content
-	to_bot_condition = f'<@!{bot.user.id}>' in message.content
+	text = message.content.lower()
+	tig_condition = check_tig_condition(text)
+	cheat_condition = check_cheat_condition(text)
+	to_bot_condition = check_ask_bot_condition(text, bot.user.id)
 
 	if tig_condition:
 		await message.channel.send(f'{message.author.name}, wanna TIG?')
 	elif cheat_condition:
 		await message.channel.send('CHEATING IS SLAVERY!')
 	elif to_bot_condition:
-		await message.channel.send(
-			f'{message.author.name}, ask peer on left, and then on right.'
-		)
+		await message.channel.send(f'{message.author.name}, ask peer on left, and then on right.')
 
-loop = asyncio.get_event_loop()
-try:
-	loop.run_until_complete(bot.start(token))
-except KeyboardInterrupt:
-	loop.run_until_complete(bot.logout())
-finally:
-	loop.close()
+if __name__ == '__main__':
+	token = os.getenv('DISCORD_TOKEN')
+	guild = os.getenv('DISCORD_GUILD_TOKEN')
+
+	loop = asyncio.get_event_loop()
+	try:
+		loop.run_until_complete(bot.start(token))
+	except KeyboardInterrupt:
+		loop.run_until_complete(bot.logout())
+	finally:
+		loop.close()
