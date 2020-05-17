@@ -6,6 +6,7 @@ from tig import tig_interaction
 from message_helpers.helper import *
 
 bot = commands.Bot(command_prefix='!', case_insensitive=True)
+bot.remove_command('help')
 
 
 @bot.command(name='give_tig')
@@ -26,6 +27,12 @@ async def tig_list(ctx):
 	asyncio.create_task(tig_interaction.get_tig_list(ctx))
 
 
+@bot.command(name='help')
+@commands.has_role("admin")
+async def help_message(ctx):
+	asyncio.create_task(tig_interaction.send_help_message(ctx))
+
+
 async def on_message(message):
 	if message.author == bot.user:
 		return
@@ -36,11 +43,11 @@ async def on_message(message):
 	to_bot_condition = check_ask_bot_condition(text, bot.user.id)
 
 	if tig_condition:
-		await message.channel.send(f'{message.author.name}, wanna TIG?')
+		await message.channel.send(f'<@!{message.author.id}>, wanna TIG?')
 	elif cheat_condition:
 		await message.channel.send('CHEATING IS SLAVERY!')
 	elif to_bot_condition:
-		await message.channel.send(f'{message.author.name}, ask peer on left, and then on right.')
+		await message.channel.send(f'<@!{message.author.id}>, ask peer on left, and then on right.')
 
 if __name__ == '__main__':
 	token = os.getenv('DISCORD_TOKEN')

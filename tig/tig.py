@@ -60,6 +60,12 @@ class Tig:
     def current_tig_date(self, date: datetime):
         self._current_tig_date = date
 
+    def formatted_current_tig_date(self) -> str:
+        return self._current_tig_date.astimezone().replace(microsecond=0, tzinfo=None).isoformat()
+
+    def formatted_previous_tig_date(self) -> str:
+        return self._previous_tig_date.astimezone().replace(microsecond=0, tzinfo=None).isoformat()
+
     def set_up_to_date(self, new_reason: str):
         self.reason = new_reason
         new_tig_date = datetime.now(timezone.utc)
