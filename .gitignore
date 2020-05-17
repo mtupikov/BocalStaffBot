@@ -63,6 +63,9 @@ build
 venv/
 *.pyc
 
+#DB
+*.sqlite
+
 # LaTeX temporary files
 *.aux
 *.log

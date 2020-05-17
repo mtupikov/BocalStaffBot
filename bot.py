@@ -1,7 +1,8 @@
 import os
+import asyncio
 
 from discord.ext import commands
-from tig.tig_impl import *
+from tig import tig_interaction
 from message_helpers.helper import *
 
 bot = commands.Bot(command_prefix='!', case_insensitive=True)
@@ -10,16 +11,21 @@ bot = commands.Bot(command_prefix='!', case_insensitive=True)
 @bot.command(name='give_tig')
 @commands.has_role("admin")
 async def give_tig(ctx):
-	asyncio.create_task(manage_tig(ctx, True))
+	asyncio.create_task(tig_interaction.manage_tig(ctx, True))
 
 
 @bot.command(name='remove_tig')
 @commands.has_role("admin")
 async def remove_tig(ctx):
-	asyncio.create_task(manage_tig(ctx, False))
+	asyncio.create_task(tig_interaction.manage_tig(ctx, False))
 
 
-@bot.event
+@bot.command(name='tig_list')
+@commands.has_role("admin")
+async def tig_list(ctx):
+	asyncio.create_task(tig_interaction.get_tig_list(ctx))
+
+
 async def on_message(message):
 	if message.author == bot.user:
 		return
@@ -42,6 +48,7 @@ if __name__ == '__main__':
 
 	loop = asyncio.get_event_loop()
 	try:
+		bot.add_listener(on_message, 'on_message')
 		loop.run_until_complete(bot.start(token))
 	except KeyboardInterrupt:
 		loop.run_until_complete(bot.logout())
