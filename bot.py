@@ -41,13 +41,14 @@ async def on_message(message):
 	tig_condition = check_tig_condition(text)
 	cheat_condition = check_cheat_condition(text)
 	to_bot_condition = check_ask_bot_condition(text, bot.user.id)
+	formatted_message_id = format_to_user_address(message.author.id)
 
 	if tig_condition:
-		await message.channel.send(f'<@!{message.author.id}>, wanna TIG?')
+		await message.channel.send(f'{formatted_message_id}, wanna TIG?')
 	elif cheat_condition:
 		await message.channel.send('CHEATING IS SLAVERY!')
 	elif to_bot_condition:
-		await message.channel.send(f'<@!{message.author.id}>, ask peer on left, and then on right.')
+		await message.channel.send(f'{formatted_message_id}, ask peer on left, and then on right.')
 
 if __name__ == '__main__':
 	token = os.getenv('DISCORD_TOKEN')

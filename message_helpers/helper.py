@@ -14,3 +14,7 @@ def check_cheat_condition(text):
 
 def check_ask_bot_condition(text, bot_id):
     return re.match(f'\\s*<@!{bot_id}>.*\\?\\s*$', text) is not None
+
+
+def format_to_user_address(user_id: int) -> str:
+    return f'<@!{user_id}>'
