@@ -1,7 +1,9 @@
 import os
 import asyncio
+import multitimer
 
 from discord.ext import commands
+from discord.guild import Guild
 from tig import tig_interaction
 from message_helpers.helper import *
 
@@ -50,12 +52,26 @@ async def on_message(message):
 	elif to_bot_condition:
 		await message.channel.send(f'{formatted_message_id}, ask peer on left, and then on right.')
 
+
+def check_tig_expired():
+	global bot
+	global guild_id
+	guild: Guild = bot.get_guild(guild_id)
+	if guild is not None:
+		for ch in guild.channels:
+			if ch.name == 'test':
+				pass
+				# asyncio.run_coroutine_threadsafe(ch.send('check_tig_expired called'), loop)
+
+
 if __name__ == '__main__':
 	token = os.getenv('DISCORD_TOKEN')
-	guild = os.getenv('DISCORD_GUILD_TOKEN')
+	guild_id = int(os.getenv('UNIT_GUILD_ID'))
 
 	loop = asyncio.get_event_loop()
 	try:
+		timer = multitimer.RepeatingTimer(interval=10, function=check_tig_expired)
+		timer.start()
 		bot.add_listener(on_message, 'on_message')
 		loop.run_until_complete(bot.start(token))
 	except KeyboardInterrupt:
