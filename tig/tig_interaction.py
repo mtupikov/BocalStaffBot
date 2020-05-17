@@ -1,4 +1,3 @@
-import asyncio
 import discord
 
 from discord.utils import get
@@ -86,13 +85,13 @@ async def manage_tig(ctx, give_tig):
 
 		for member in members:
 			if member.nick == member_to_ban:
-				asyncio.create_task(_give_or_remove_tig(ctx, member, give_tig, reason))
+				await _give_or_remove_tig(ctx, member, give_tig, reason)
 				return
 
 		for member in members:
 			try:
 				if member.id == int(member_to_ban):
-					asyncio.create_task(_give_or_remove_tig(ctx, member, give_tig, reason))
+					await _give_or_remove_tig(ctx, member, give_tig, reason)
 					return
 			except Exception:
 				pass

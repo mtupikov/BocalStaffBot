@@ -12,25 +12,25 @@ bot.remove_command('help')
 @bot.command(name='give_tig')
 @commands.has_role("admin")
 async def give_tig(ctx):
-	asyncio.create_task(tig_interaction.manage_tig(ctx, True))
+	await tig_interaction.manage_tig(ctx, True)
 
 
 @bot.command(name='remove_tig')
 @commands.has_role("admin")
 async def remove_tig(ctx):
-	asyncio.create_task(tig_interaction.manage_tig(ctx, False))
+	await tig_interaction.manage_tig(ctx, False)
 
 
 @bot.command(name='tig_list')
 @commands.has_role("admin")
 async def tig_list(ctx):
-	asyncio.create_task(tig_interaction.get_tig_list(ctx))
+	await tig_interaction.get_tig_list(ctx)
 
 
 @bot.command(name='help')
 @commands.has_role("admin")
 async def help_message(ctx):
-	asyncio.create_task(tig_interaction.send_help_message(ctx))
+	await tig_interaction.send_help_message(ctx)
 
 
 async def on_message(message):
