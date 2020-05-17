@@ -38,9 +38,11 @@ class Tig:
     def is_active(self, is_active: bool):
         self._is_active = is_active
 
+    @property
     def username(self) -> str:
         return self._username
 
+    @property
     def user_id(self) -> int:
         return self._user_id
 
