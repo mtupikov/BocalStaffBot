@@ -31,7 +31,7 @@ class TigDatabase:
     def tig_list_by_user_id(self, user_id: int) -> list:
         cursor = self._db_instance.cursor()
         select_tuple: tuple = (user_id,)
-        cursor.execute(select_active_tig_list, select_tuple)
+        cursor.execute(select_active_tig_list_by_id, select_tuple)
         raw_tig_list = cursor.fetchall()
         cursor.close()
         tig_list = TigDatabase.convert_raw_tig_list(raw_tig_list)
@@ -72,9 +72,14 @@ class TigDatabase:
         cursor.connection.commit()
         cursor.close()
 
-    def get_tig_list(self):
+    def get_tig_list(self, get_only_active):
         cursor = self._db_instance.cursor()
-        cursor.execute(select_all_tig_list)
+        query = ''
+        if get_only_active:
+            query = select_active_tig_list
+        else:
+            query = select_all_tig_list
+        cursor.execute(query)
         raw_tig_list = cursor.fetchall()
         cursor.close()
         return TigDatabase.convert_raw_tig_list(raw_tig_list)

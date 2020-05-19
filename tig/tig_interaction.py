@@ -25,22 +25,23 @@ async def send_help_message(ctx):
 
 
 async def get_tig_list(ctx, only_active):
-	tig_list = tig_db.get_tig_list()
+	tig_list = tig_db.get_tig_list(only_active)
 
-	embed = discord.Embed(title="Users with ТИЖ", color=0x00ff00)
+	active_prefix = ''
+	if only_active:
+		active_prefix = 'Active '
 
-	count = 0
-	for tig in tig_list:
-		if tig.is_active or not only_active:
-			embed.add_field(name="Username", value=tig.username, inline=True)
-			embed.add_field(name="ТИЖ reason", value=tig.reason, inline=True)
-			embed.add_field(name="Last tig date", value=tig.formatted_current_tig_date(), inline=True)
-			count += 1
-
-	if count == 0:
-		embed = discord.Embed(title="ТИЖ list is empty", color=0xff0000)
+	if len(tig_list) == 0:
+		embed = discord.Embed(title=f"{active_prefix}ТИЖ list is empty", color=0xff0000)
 		await ctx.send(embed=embed)
 		return
+
+	embed = discord.Embed(title=f"Users with {active_prefix}ТИЖ", color=0x00ff00)
+
+	for tig in tig_list:
+		embed.add_field(name="Username", value=tig.username, inline=True)
+		embed.add_field(name="ТИЖ reason", value=tig.reason, inline=True)
+		embed.add_field(name="Last tig date", value=tig.formatted_current_tig_date(), inline=True)
 
 	await ctx.send(embed=embed)
 
