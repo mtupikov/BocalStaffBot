@@ -44,8 +44,8 @@ class TigDatabase:
     def add_tig(self, tig: Tig):
         cursor = self._db_instance.cursor()
         cursor.execute(insert_tig_query, (
-            tig.username(),
-            tig.user_id(),
+            tig.username,
+            tig.user_id,
             tig.reason,
             str(tig.previous_tig_date),
             str(tig.current_tig_date),
@@ -55,7 +55,7 @@ class TigDatabase:
         cursor.close()
 
     def set_tig_inactive(self, tig: Tig):
-        tig_list = self.tig_list_by_user_id(tig.user_id())
+        tig_list = self.tig_list_by_user_id(tig.user_id)
         cursor = self._db_instance.cursor()
         if len(tig_list) >= 1:
             assert len(tig_list) == 1
@@ -67,7 +67,7 @@ class TigDatabase:
 
     def update_tig(self, tig: Tig):
         cursor = self._db_instance.cursor()
-        upd_tuple = (tig.reason, str(tig.previous_tig_date), str(tig.current_tig_date), tig.user_id())
+        upd_tuple = (tig.reason, str(tig.previous_tig_date), str(tig.current_tig_date), tig.user_id)
         cursor.execute(update_user_tig_query, upd_tuple)
         cursor.connection.commit()
         cursor.close()

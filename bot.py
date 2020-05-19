@@ -26,7 +26,13 @@ async def remove_tig(ctx):
 @bot.command(name='tig_list')
 @commands.has_role("admin")
 async def tig_list(ctx):
-	await tig_interaction.get_tig_list(ctx)
+	await tig_interaction.get_tig_list(ctx, True)
+
+
+@bot.command(name='all_tig_list')
+@commands.has_role("admin")
+async def all_tig_list(ctx):
+	await tig_interaction.get_tig_list(ctx, False)
 
 
 @bot.command(name='help')
