@@ -7,7 +7,7 @@ from datetime import datetime
 
 class TigDatabase:
     def __init__(self):
-        self._db_instance = sqlite3.connect(tig_db_name)
+        self._db_instance = sqlite3.connect(tig_db_name, check_same_thread=False)
         cursor = self._db_instance.cursor()
         cursor.execute(create_tig_table_query)
         cursor.connection.commit()
@@ -16,12 +16,11 @@ class TigDatabase:
     @staticmethod
     def convert_raw_tig_list(raw_tig_list: list) -> list:
         tig_list = []
-        for username, user_id, reason, prev_tig_date, current_tig_date, is_active in raw_tig_list:
+        for username, user_id, reason, current_tig_date, is_active in raw_tig_list:
             tig = Tig(
                 username,
                 user_id,
                 reason,
-                datetime.fromisoformat(prev_tig_date),
                 datetime.fromisoformat(current_tig_date),
                 is_active
             )
@@ -31,7 +30,7 @@ class TigDatabase:
     def tig_list_by_user_id(self, user_id: int) -> list:
         cursor = self._db_instance.cursor()
         select_tuple: tuple = (user_id,)
-        cursor.execute(select_active_tig_list_by_id, select_tuple)
+        cursor.execute(select_tig_list_by_id, select_tuple)
         raw_tig_list = cursor.fetchall()
         cursor.close()
         tig_list = TigDatabase.convert_raw_tig_list(raw_tig_list)
@@ -47,7 +46,6 @@ class TigDatabase:
             tig.username,
             tig.user_id,
             tig.reason,
-            str(tig.previous_tig_date),
             str(tig.current_tig_date),
             tig.is_active
         ))
@@ -67,14 +65,13 @@ class TigDatabase:
 
     def update_tig(self, tig: Tig):
         cursor = self._db_instance.cursor()
-        upd_tuple = (tig.reason, str(tig.previous_tig_date), str(tig.current_tig_date), tig.user_id)
+        upd_tuple = (tig.reason, str(tig.current_tig_date), tig.user_id)
         cursor.execute(update_user_tig_query, upd_tuple)
         cursor.connection.commit()
         cursor.close()
 
     def get_tig_list(self, get_only_active):
         cursor = self._db_instance.cursor()
-        query = ''
         if get_only_active:
             query = select_active_tig_list
         else:

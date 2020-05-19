@@ -7,14 +7,12 @@ class Tig:
         username: str,
         user_id: int,
         reason: str,
-        prev_tig_date: datetime,
         current_tig_date: datetime,
         is_active: bool
     ):
         self._username = username
         self._user_id = user_id
         self.reason = reason
-        self.previous_tig_date = prev_tig_date
         self.current_tig_date = current_tig_date
         self.is_active = is_active
 
@@ -47,14 +45,6 @@ class Tig:
         return self._user_id
 
     @property
-    def previous_tig_date(self) -> datetime:
-        return self._previous_tig_date
-
-    @previous_tig_date.setter
-    def previous_tig_date(self, date: datetime):
-        self._previous_tig_date = date
-
-    @property
     def current_tig_date(self) -> datetime:
         return self._current_tig_date
 
@@ -64,12 +54,3 @@ class Tig:
 
     def formatted_current_tig_date(self) -> str:
         return self._current_tig_date.astimezone().replace(microsecond=0, tzinfo=None).isoformat()
-
-    def formatted_previous_tig_date(self) -> str:
-        return self._previous_tig_date.astimezone().replace(microsecond=0, tzinfo=None).isoformat()
-
-    def set_up_to_date(self, new_reason: str):
-        self.reason = new_reason
-        new_tig_date = datetime.now(timezone.utc)
-        self.previous_tig_date = self._current_tig_date
-        self.current_tig_date = new_tig_date

@@ -3,7 +3,6 @@ import asyncio
 import multitimer
 
 from discord.ext import commands
-from discord.guild import Guild
 from tig import tig_interaction
 from message_helpers.helper import *
 
@@ -62,12 +61,8 @@ async def on_message(message):
 def check_tig_expired():
 	global bot
 	global guild_id
-	guild: Guild = bot.get_guild(guild_id)
-	if guild is not None:
-		for ch in guild.channels:
-			if ch.name == 'test':
-				pass
-				# asyncio.run_coroutine_threadsafe(ch.send('check_tig_expired called'), loop)
+	global loop
+	tig_interaction.check_tig_expired_impl(bot, guild_id, loop)
 
 
 if __name__ == '__main__':
