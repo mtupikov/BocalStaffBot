@@ -72,7 +72,7 @@ async def _give_or_remove_tig(ctx, member, give_tig, reason):
 		logger.info(f"{ctx.author} successfully gave tig to {member.nick}")
 		await ctx.send(f'{formatted_member_id} is given ТИЖ till {tig.formatted_current_tig_date()}!')
 	else:
-		if len(tig_list) == 0:
+		if len(tig_list) == 0 or not tig_list[0].is_active:
 			logger.info(f"{member.nick} does not have tig to remove")
 			await ctx.send(f'{formatted_member_id} does not have ТИЖ.')
 			return
