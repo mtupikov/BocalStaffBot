@@ -63,6 +63,9 @@ build
 venv/
 *.pyc
 
+# Linux
+*.service
+
 #DB
 *.sqlite
 
