@@ -64,7 +64,7 @@ venv/
 *.pyc
 
 # Linux
-.service
+*.service
 
 #DB
 *.sqlite
