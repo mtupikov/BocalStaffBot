@@ -9,6 +9,7 @@ from message_helpers.helper import *
 
 bot = commands.Bot(command_prefix='!', case_insensitive=True)
 bot.remove_command('help')
+logger = logging.getLogger('discord')
 
 
 @bot.command(name='give_tig')
@@ -26,21 +27,21 @@ async def remove_tig(ctx):
 @bot.command(name='tig_list')
 @commands.has_role("admin")
 async def tig_list(ctx):
-	logging.info(f"{ctx.author} requested active tig list")
+	logger.info(f"{ctx.author} requested active tig list")
 	await tig_interaction.get_tig_list(ctx, True)
 
 
 @bot.command(name='all_tig_list')
 @commands.has_role("admin")
 async def all_tig_list(ctx):
-	logging.info(f"{ctx.author} requested full tig list")
+	logger.info(f"{ctx.author} requested full tig list")
 	await tig_interaction.get_tig_list(ctx, False)
 
 
 @bot.command(name='help')
 @commands.has_role("admin")
 async def help_message(ctx):
-	logging.info(f"{ctx.author} requested help message")
+	logger.info(f"{ctx.author} requested help message")
 	await tig_interaction.send_help_message(ctx)
 
 
@@ -69,7 +70,23 @@ def check_tig_expired():
 	tig_interaction.check_tig_expired_impl(bot, guild_id, loop)
 
 
+def setup_logging():
+	logger.setLevel(logging.INFO)
+
+	handler = logging.FileHandler(filename='bocal_staff_bot.log', encoding='utf-8', mode='w')
+	formatter = logging.Formatter('%(asctime)s %(levelname).1s: %(message)s', "%Y-%m-%dT%H:%M:%S")
+	handler.setFormatter(formatter)
+
+	console_handler = logging.StreamHandler()
+	console_handler.setFormatter(formatter)
+
+	logger.addHandler(console_handler)
+	logger.addHandler(handler)
+
+
 if __name__ == '__main__':
+	setup_logging()
+
 	token = os.getenv('DISCORD_TOKEN')
 	guild_id = int(os.getenv('UNIT_GUILD_ID'))
 

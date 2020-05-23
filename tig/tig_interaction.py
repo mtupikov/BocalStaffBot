@@ -11,6 +11,7 @@ from tig.tig import Tig
 from message_helpers.helper import format_to_user_address
 
 tig_db = TigDatabase()
+logger = logging.getLogger('discord')
 
 
 def discord_user_to_tig(member, reason: str) -> Tig:
@@ -59,7 +60,7 @@ async def _give_or_remove_tig(ctx, member, give_tig, reason):
 	if give_tig:
 		if len(tig_list) != 0:
 			if tig_list[0].is_active:
-				logging.info(f"{member.nick} already has tig till {tig_list[0].formatted_current_tig_date()}")
+				logger.info(f"{member.nick} already has tig till {tig_list[0].formatted_current_tig_date()}")
 				await ctx.send(f'{formatted_member_id} already has ТИЖ till {tig_list[0].formatted_current_tig_date()}.')
 				return
 			else:
@@ -68,17 +69,17 @@ async def _give_or_remove_tig(ctx, member, give_tig, reason):
 			tig_db.add_tig(tig)
 
 		await member.add_roles(role)
-		logging.info(f"{ctx.author} successfully gave tig to {member.nick}")
+		logger.info(f"{ctx.author} successfully gave tig to {member.nick}")
 		await ctx.send(f'{formatted_member_id} is given ТИЖ till {tig.formatted_current_tig_date()}!')
 	else:
 		if len(tig_list) == 0:
-			logging.info(f"{member.nick} does not have tig to remove")
+			logger.info(f"{member.nick} does not have tig to remove")
 			await ctx.send(f'{formatted_member_id} does not have ТИЖ.')
 			return
 
 		await member.remove_roles(role)
 		tig_db.set_tig_inactive(tig)
-		logging.info(f"{ctx.author} successfully removed tig from {member.nick}")
+		logger.info(f"{ctx.author} successfully removed tig from {member.nick}")
 		await ctx.send(f'{formatted_member_id} is now free from ТИЖ.')
 
 
@@ -96,7 +97,7 @@ async def _walk_through_members(ctx, members, member_to_handle, reason, give_tig
 		except Exception:
 			pass
 
-	logging.info(f"{ctx.author} requested to give tig to invalid username ({member_to_handle})")
+	logger.info(f"{ctx.author} requested to give tig to invalid username ({member_to_handle})")
 	await ctx.send('Invalid username.')
 
 
@@ -110,19 +111,19 @@ async def manage_tig(ctx, give_tig):
 
 	if incomplete_tig_match:
 		member_to_ban = incomplete_tig_match.group(1)
-		logging.info(f"{ctx.author} did not provided reason to ban {member_to_ban}")
+		logger.info(f"{ctx.author} did not provided reason to ban {member_to_ban}")
 		await ctx.send(f'You must provide reason to give ТИЖ to {member_to_ban}.')
 	elif give_tig_match:
 		member_to_ban = give_tig_match.group(1)
 		reason = give_tig_match.group(2)
-		logging.info(f"{ctx.author} requested to give tig to {member_to_ban}, reason: {reason}")
+		logger.info(f"{ctx.author} requested to give tig to {member_to_ban}, reason: {reason}")
 		await _walk_through_members(ctx, members, member_to_ban, reason, give_tig)
 	elif remove_tig_match:
 		member_to_free = remove_tig_match.group(1)
-		logging.info(f"{ctx.author} requested to remove tig from {member_to_free}")
+		logger.info(f"{ctx.author} requested to remove tig from {member_to_free}")
 		await _walk_through_members(ctx, members, member_to_free, '', give_tig)
 	else:
-		logging.info(f"{ctx.author} has sent invalid command")
+		logger.info(f"{ctx.author} has sent invalid command")
 		await send_help_message(ctx)
 
 
