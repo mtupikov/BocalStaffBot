@@ -30,6 +30,8 @@ async def send_help_message(ctx):
 
 
 async def get_tig_list(ctx, only_active):
+	await ctx.message.delete()
+
 	tig_list = tig_db.get_tig_list(only_active)
 
 	active_prefix = ''
@@ -56,6 +58,8 @@ async def _give_or_remove_tig(ctx, member, give_tig, reason):
 	tig = discord_user_to_tig(member, reason)
 	tig_list = tig_db.tig_list_by_user_id(member.id)
 	formatted_member_id = format_to_user_address(member.id)
+
+	await ctx.message.delete()
 
 	if give_tig:
 		if len(tig_list) != 0:
