@@ -3,6 +3,8 @@ import asyncio
 import multitimer
 import logging
 
+from aiohttp import client_exceptions
+from datetime import datetime, timezone
 from discord.ext import commands
 from tig import tig_interaction
 from message_helpers.helper import *
@@ -81,7 +83,9 @@ def check_tig_expired():
 def setup_logging():
 	logger.setLevel(logging.INFO)
 
-	handler = logging.FileHandler(filename='bocal_staff_bot.log', encoding='utf-8', mode='w')
+	current_date = datetime.now()
+	current_date_str = current_date.astimezone().replace(microsecond=0, tzinfo=None).isoformat()
+	handler = logging.FileHandler(filename=f'{current_date_str}.log', encoding='utf-8', mode='w')
 	formatter = logging.Formatter('%(asctime)s %(levelname).1s: %(message)s', "%Y-%m-%dT%H:%M:%S")
 	handler.setFormatter(formatter)
 
@@ -106,5 +110,8 @@ if __name__ == '__main__':
 		loop.run_until_complete(bot.start(token))
 	except KeyboardInterrupt:
 		loop.run_until_complete(bot.logout())
+	except client_exceptions.ClientConnectorError as ex:
+		logger.critical(f'Error: {ex.strerror})')
+		exit()
 	finally:
 		loop.close()
