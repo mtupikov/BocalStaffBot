@@ -1,6 +1,7 @@
 import os
 import asyncio
 import multitimer
+import logging
 
 from discord.ext import commands
 from tig import tig_interaction
@@ -25,18 +26,21 @@ async def remove_tig(ctx):
 @bot.command(name='tig_list')
 @commands.has_role("admin")
 async def tig_list(ctx):
+	logging.info(f"{ctx.author} requested active tig list")
 	await tig_interaction.get_tig_list(ctx, True)
 
 
 @bot.command(name='all_tig_list')
 @commands.has_role("admin")
 async def all_tig_list(ctx):
+	logging.info(f"{ctx.author} requested full tig list")
 	await tig_interaction.get_tig_list(ctx, False)
 
 
 @bot.command(name='help')
 @commands.has_role("admin")
 async def help_message(ctx):
+	logging.info(f"{ctx.author} requested help message")
 	await tig_interaction.send_help_message(ctx)
 
 
