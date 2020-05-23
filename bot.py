@@ -45,6 +45,14 @@ async def help_message(ctx):
 	await tig_interaction.send_help_message(ctx)
 
 
+@bot.command(name='logout')
+@commands.has_role("admin")
+async def help_message(ctx):
+	logger.info(f"{ctx.author} requested bot logout")
+	if ctx.author.nick == 'mtupikov':
+		await bot.logout()
+
+
 async def on_message(message):
 	if message.author == bot.user:
 		return
