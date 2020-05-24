@@ -7,7 +7,7 @@ from aiohttp import client_exceptions
 from datetime import datetime
 from discord.ext import commands
 from tig import tig_interaction
-from message_helpers.helper import *
+from message_handlers import handlers
 
 bot = commands.Bot(command_prefix='!', case_insensitive=True)
 bot.remove_command('help')
@@ -55,29 +55,18 @@ async def help_message(ctx):
 		await bot.logout()
 
 
-async def on_message(message):
-	if message.author == bot.user:
-		return
-
-	text = message.content.lower()
-	tig_condition = check_tig_condition(text)
-	cheat_condition = check_cheat_condition(text)
-	to_bot_condition = check_ask_bot_condition(text, bot.user.id)
-	formatted_message_id = format_to_user_address(message.author.id)
-
-	if tig_condition:
-		await message.channel.send(f'{formatted_message_id}, wanna TIG?')
-	elif cheat_condition:
-		await message.channel.send('CHEATING IS SLAVERY!')
-	elif to_bot_condition:
-		await message.channel.send(f'{formatted_message_id}, ask peer on left, and then on right.')
-
-
 def check_tig_expired():
 	global bot
 	global guild_id
 	global loop
 	tig_interaction.check_tig_expired_impl(bot, guild_id, loop)
+
+
+async def on_message(message):
+	global bot
+	if message.author == bot.user:
+		return
+	await handlers.on_message_impl(message, bot)
 
 
 def setup_logging():
