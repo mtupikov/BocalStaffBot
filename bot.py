@@ -4,7 +4,7 @@ import multitimer
 import logging
 
 from aiohttp import client_exceptions
-from datetime import datetime, timezone
+from datetime import datetime
 from discord.ext import commands
 from tig import tig_interaction
 from message_helpers.helper import *
@@ -84,9 +84,9 @@ def setup_logging():
 	logger.setLevel(logging.INFO)
 
 	current_date = datetime.now()
-	current_date_str = current_date.astimezone().replace(microsecond=0, tzinfo=None).isoformat()
+	current_date_str: str = current_date.astimezone().replace(microsecond=0, tzinfo=None).strftime('%Y-%m-%dT%H-%M-%S')
 	handler = logging.FileHandler(filename=f'{current_date_str}.log', encoding='utf-8', mode='w')
-	formatter = logging.Formatter('%(asctime)s %(levelname).1s: %(message)s', "%Y-%m-%dT%H:%M:%S")
+	formatter = logging.Formatter('%(asctime)s %(levelname).1s: %(message)s', "%Y-%m-%dT%H-%M-%S")
 	handler.setFormatter(formatter)
 
 	console_handler = logging.StreamHandler()
