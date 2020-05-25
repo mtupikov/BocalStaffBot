@@ -3,7 +3,7 @@ import re
 from message_helpers.words_source import profane_words, cheat_words
 
 
-def check_tig_condition(text):
+def check_profane_condition(text):
     a = set(text.split())
     return any(i in a for i in profane_words)
 

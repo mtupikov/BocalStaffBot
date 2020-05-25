@@ -18,13 +18,13 @@ async def on_message_impl(msg: message, bot: commands.bot):
         return
 
     text = msg.content.lower()
-    tig_condition = check_tig_condition(text)
+    profane_condition = check_profane_condition(text)
     cheat_condition = check_cheat_condition(text)
     to_bot_condition = check_ask_bot_condition(text, bot.user.id)
     formatted_message_id = format_to_user_address(msg.author.id)
 
-    if tig_condition:
-        await msg.channel.send(f'{formatted_message_id}, wanna TIG?')
+    if profane_condition:
+        await msg.add_reaction('❗')  # exclamation mark
     elif cheat_condition:
         await msg.channel.send('CHEATING IS SLAVERY!')
     elif to_bot_condition:
