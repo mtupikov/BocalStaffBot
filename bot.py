@@ -99,8 +99,6 @@ if __name__ == '__main__':
 		loop.run_until_complete(bot.start(token))
 	except KeyboardInterrupt:
 		loop.run_until_complete(bot.logout())
-	except client_exceptions.ClientConnectorError as ex:
-		logger.critical(f'Error: {ex.strerror}')
 	finally:
 		loop.stop()
 		loop.close()
