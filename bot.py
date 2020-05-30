@@ -15,33 +15,33 @@ logger = logging.getLogger('discord')
 
 
 @bot.command(name='give_tig')
-@commands.has_role("admin")
+@commands.has_any_role("admin", "moderator")
 async def give_tig(ctx):
 	await tig_interaction.manage_tig(ctx, True)
 
 
 @bot.command(name='remove_tig')
-@commands.has_role("admin")
+@commands.has_any_role("admin", "moderator")
 async def remove_tig(ctx):
 	await tig_interaction.manage_tig(ctx, False)
 
 
 @bot.command(name='tig_list')
-@commands.has_role("admin")
+@commands.has_any_role("admin", "moderator")
 async def tig_list(ctx):
 	logger.info(f"{ctx.author} requested active tig list")
 	await tig_interaction.get_tig_list(ctx, True)
 
 
 @bot.command(name='all_tig_list')
-@commands.has_role("admin")
+@commands.has_any_role("admin", "moderator")
 async def all_tig_list(ctx):
 	logger.info(f"{ctx.author} requested full tig list")
 	await tig_interaction.get_tig_list(ctx, False)
 
 
 @bot.command(name='cmds')
-@commands.has_role("admin")
+@commands.has_any_role("admin", "moderator")
 async def help_message(ctx):
 	logger.info(f"{ctx.author} requested help message")
 	await tig_interaction.send_help_message(ctx)
