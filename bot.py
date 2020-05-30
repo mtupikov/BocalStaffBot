@@ -93,7 +93,7 @@ if __name__ == '__main__':
 
 	loop = asyncio.get_event_loop()
 	try:
-		timer = multitimer.RepeatingTimer(interval=10, function=check_tig_expired)
+		timer = multitimer.RepeatingTimer(interval=30, function=check_tig_expired)
 		timer.start()
 		bot.add_listener(on_message, 'on_message')
 		loop.run_until_complete(bot.start(token))
