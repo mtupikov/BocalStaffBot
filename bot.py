@@ -3,7 +3,7 @@ import asyncio
 import multitimer
 import logging
 
-from aiohttp import client_exceptions
+from discord.errors import LoginFailure
 from datetime import datetime
 from discord.ext import commands
 from tig import tig_interaction
@@ -99,6 +99,8 @@ if __name__ == '__main__':
 		loop.run_until_complete(bot.start(token))
 	except KeyboardInterrupt:
 		loop.run_until_complete(bot.logout())
+	except LoginFailure as ex:
+		logger.info(f"Login failure, maybe invalid token passed? '{token}'")
 	finally:
 		loop.stop()
 		loop.close()
