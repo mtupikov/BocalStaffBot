@@ -25,6 +25,7 @@ async def send_help_message(ctx):
 	embed.add_field(name="Remove ТИЖ", value='!remove_tig <username | id>', inline=False)
 	embed.add_field(name="ТИЖ list", value='!tig_list', inline=False)
 	embed.add_field(name="Active ТИЖ list", value='!all_tig_list', inline=False)
+	embed.add_field(name="Help message", value='!cmds', inline=False)
 
 	await ctx.send(embed=embed)
 

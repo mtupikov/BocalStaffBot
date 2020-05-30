@@ -40,7 +40,7 @@ async def all_tig_list(ctx):
 	await tig_interaction.get_tig_list(ctx, False)
 
 
-@bot.command(name='help')
+@bot.command(name='cmds')
 @commands.has_role("admin")
 async def help_message(ctx):
 	logger.info(f"{ctx.author} requested help message")
@@ -49,7 +49,7 @@ async def help_message(ctx):
 
 @bot.command(name='logout')
 @commands.has_role("admin")
-async def help_message(ctx):
+async def logout(ctx):
 	logger.info(f"{ctx.author} requested bot logout")
 	if ctx.author.nick == 'mtupikov':
 		await bot.logout()
